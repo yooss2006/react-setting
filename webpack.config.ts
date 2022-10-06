@@ -13,7 +13,7 @@ import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
 const config: Configuration = {
-  name: 'sleact',
+  name: 'test',
   mode: isDevelopment ? 'development' : 'production',
   devtool: !isDevelopment ? 'hidden-source-map' : 'eval',
   resolve: {
@@ -28,7 +28,7 @@ const config: Configuration = {
     },
   },
   entry: {
-    app: './client',
+    app: './src/index',
   },
   module: {
     rules: [
@@ -78,8 +78,10 @@ const config: Configuration = {
   devServer: {
     historyApiFallback: true, // react router
     port: 3090,
+    hot: true,
+    compress: true,
     devMiddleware: { publicPath: '/dist/' },
-    static: { directory: path.resolve(__dirname) },
+    static: { directory: path.resolve(__dirname, './public') },
     // proxy: {
     //   '/api/': {
     //     target: 'http://localhost:3095',
@@ -92,7 +94,7 @@ const config: Configuration = {
 if (isDevelopment && config.plugins) {
   config.plugins.push(new webpack.HotModuleReplacementPlugin());
   config.plugins.push(new ReactRefreshWebpackPlugin());
-  config.plugins.push(new BundleAnalyzerPlugin({ analyzerMode: 'server', openAnalyzer: true }));
+  config.plugins.push(new BundleAnalyzerPlugin({ analyzerMode: 'static' }));
 }
 if (!isDevelopment && config.plugins) {
   config.plugins.push(new webpack.LoaderOptionsPlugin({ minimize: true }));
